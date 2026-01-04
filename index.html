@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dog vs Cat Classifier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 420px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 35px 30px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 25px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #ffffff;
+            color: #333;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        .result {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 18px;
+            border-radius: 14px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .result h2 {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .confidence {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-top: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .note {
+            margin-top: 18px;
+            font-size: 12px;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🐶 Dog vs Cat 🐱</h1>
+    <p class="subtitle">Upload an image and let AI decide</p>
+
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit">Predict Now 🚀</button>
+    </form>
+
+    {% if result %}
+        <div class="result">
+            <h2>Prediction: {{ result | capitalize }}</h2>
+
+            {% if prob is defined %}
+                <p class="confidence">
+                    Model Probability: {{ "%.4f"|format(prob) }}
+                </p>
+            {% endif %}
+
+            {% if img_path %}
+                <img src="{{ img_path }}" alt="Uploaded Image">
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="note">
+        Upload a clear image of a dog or cat.<br>
+        If the model is unsure, it will return <b>neither</b>.
+    </div>
+</div>
+
+</body>
+</html>
